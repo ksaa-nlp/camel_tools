@@ -47,6 +47,23 @@ def lemmaList():
     return jsonify({"text": list(set(lemmaArray)), "type": 'lex'})
 
 
+@app.route("/lemmaOfLists", methods=['POST'])
+def lemmeOfLists():
+
+    lemmaArray = []
+    content = request.get_json()
+    words = content['text'].split(',')
+
+    for word in words:
+
+        analyses = analyzer.analyze(word)
+        for analysis in analyses:
+            dict = {'lex': analysis["lex"], 'word': word}
+            lemmaArray.append(dict)
+
+    return jsonify({"text": list(lemmaArray), "type": 'lex'})
+
+
 @app.route("/morph", methods=['POST'])
 def morph():
     content = request.get_json(silent=True)
